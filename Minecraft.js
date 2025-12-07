@@ -130,19 +130,36 @@ function showEnchantmentConfirm(player, enchant) {
 }
 
 // ลงทะเบียนคำสั่ง /shop
-system.beforeEvents.startup.subscribe(({ customCommandRegistry }) => {
-    /** @type {import("@minecraft/server").CustomCommand} */
+system.beforeEvents.startup.subscribe((init) => {
     const shopCommand = {
         name: "shop",
         description: "Open the shop menu",
-        permissionLevel: CommandPermissionLevel.Normal, // ทุกคนใช้ได้
-        cheatsRequired: false // ไม่ต้องเปิด cheat
+        permissionLevel: CommandPermissionLevel.Any,
+        cheatsRequired: false,
+        optionalParameters: [],
+        mandatoryParameters: []
     };
 
-    customCommandRegistry.registerCommand(shopCommand, (context) => {
-        const player = context.source;
-        if (player && player.typeId === "minecraft:player") {
-            showBuySellMenu(player);
-        }
-    });
+    init.customCommandRegistry.registerCommand(
+        shopCommand,
+        shopCommandHandler
+    );
 });
+
+function shopCommandHandler(origin) {
+    const player = origin.source;
+    if (!player || player.typeId !== "minecraft:player") {
+        return {
+            status: CustomCommandStatus.Failure,
+            message: "No player found to open shop."
+        };
+    }
+
+    system.run(() => {
+        showBuySellMenu(player);
+    });
+
+    return {
+        status: CustomCommandStatus.Success
+    };
+}
