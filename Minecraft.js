@@ -2,32 +2,32 @@
 enchantments: {
     name: "Enchantments",
     items: [
-        { name: "Mending", command: "mending", buyCost: 5000 },
-        { name: "Unbreaking III", command: "unbreaking 3", buyCost: 2500 },
-        { name: "Sharpness V", command: "sharpness 5", buyCost: 3800 },
-        { name: "Protection IV", command: "protection 4", buyCost: 3700 },
-        { name: "Fortune III", command: "fortune 3", buyCost: 4900 },
-        { name: "Efficiency V", command: "efficiency 5", buyCost: 4600 },
-        { name: "Silk Touch", command: "silk_touch", buyCost: 4700 },
-        { name: "Looting III", command: "looting 3", buyCost: 1150 },
-        { name: "Flame", command: "flame", buyCost: 2000 },
-        { name: "Infinity", command: "infinity", buyCost: 4500 },
-        { name: "Power V", command: "power 5", buyCost: 4650 },
-        { name: "Punch II", command: "punch 2", buyCost: 4450 },
-        { name: "Feather Falling IV", command: "feather_falling 4", buyCost: 4550 },
-        { name: "Depth Strider III", command: "depth_strider 3", buyCost: 4600 },
-        { name: "Respiration III", command: "respiration 3", buyCost: 2500 },
-        { name: "Aqua Affinity", command: "aqua_affinity", buyCost: 2400 },
-        { name: "Thorns III", command: "thorns 3", buyCost: 3700 },
-        { name: "Fire Aspect II", command: "fire_aspect 2", buyCost: 4550 },
-        { name: "Knockback II", command: "knockback 2", buyCost: 1350 },
-        { name: "Smite V", command: "smite 5", buyCost: 1700 },
+        { name: "Mending", command: "mending", buyCost: 1000 },
+        { name: "Unbreaking III", command: "unbreaking 3", buyCost: 500 },
+        { name: "Sharpness V", command: "sharpness 5", buyCost: 800 },
+        { name: "Protection IV", command: "protection 4", buyCost: 700 },
+        { name: "Fortune III", command: "fortune 3", buyCost: 900 },
+        { name: "Efficiency V", command: "efficiency 5", buyCost: 600 },
+        { name: "Silk Touch", command: "silk_touch", buyCost: 1200 },
+        { name: "Looting III", command: "looting 3", buyCost: 750 },
+        { name: "Flame", command: "flame", buyCost: 400 },
+        { name: "Infinity", command: "infinity", buyCost: 1500 },
+        { name: "Power V", command: "power 5", buyCost: 650 },
+        { name: "Punch II", command: "punch 2", buyCost: 450 },
+        { name: "Feather Falling IV", command: "feather_falling 4", buyCost: 550 },
+        { name: "Depth Strider III", command: "depth_strider 3", buyCost: 600 },
+        { name: "Respiration III", command: "respiration 3", buyCost: 500 },
+        { name: "Aqua Affinity", command: "aqua_affinity", buyCost: 400 },
+        { name: "Thorns III", command: "thorns 3", buyCost: 700 },
+        { name: "Fire Aspect II", command: "fire_aspect 2", buyCost: 550 },
+        { name: "Knockback II", command: "knockback 2", buyCost: 350 },
+        { name: "Smite V", command: "smite 5", buyCost: 700 },
         { name: "Bane of Arthropods V", command: "bane_of_arthropods 5", buyCost: 650 },
         { name: "Sweeping Edge III", command: "sweeping 3", buyCost: 600 },
-        { name: "Channeling", command: "channeling", buyCost: 2800 },
-        { name: "Impaling V", command: "impaling 5", buyCost: 2700 },
-        { name: "Loyalty III", command: "loyalty 3", buyCost: 2650 },
-        { name: "Riptide III", command: "riptide 3", buyCost: 4750 },
+        { name: "Channeling", command: "channeling", buyCost: 800 },
+        { name: "Impaling V", command: "impaling 5", buyCost: 700 },
+        { name: "Loyalty III", command: "loyalty 3", buyCost: 650 },
+        { name: "Riptide III", command: "riptide 3", buyCost: 750 },
         { name: "Multishot", command: "multishot", buyCost: 900 },
         { name: "Piercing IV", command: "piercing 4", buyCost: 800 },
         { name: "Quick Charge III", command: "quick_charge 3", buyCost: 700 },
@@ -124,4 +124,14 @@ function showEnchantmentConfirm(player, enchant) {
             }
         }
     });
-         }
+}
+
+// ลบส่วนเก่าที่ใช้ item และเปลี่ยนเป็นใช้คำสั่ง /shop
+world.beforeEvents.chatSend.subscribe(event => {
+    const { sender, message } = event;
+    
+    if (message.toLowerCase() === "/shop" || message.toLowerCase() === "!shop") {
+        event.cancel = true;
+        showBuySellMenu(sender);
+    }
+});
