@@ -1,3 +1,6 @@
+import { world, system, ItemStack, ScoreboardIdentityType, CommandPermissionLevel, CustomCommandOrigin, CustomCommandStatus, CustomCommandParamType } from "@minecraft/server";
+import { ActionFormData, ModalFormData } from "@minecraft/server-ui";
+
 // เพิ่ม enchantments ในส่วน shopCategories
 enchantments: {
     name: "Enchantments",
@@ -126,12 +129,20 @@ function showEnchantmentConfirm(player, enchant) {
     });
 }
 
-// ลบส่วนเก่าที่ใช้ item และเปลี่ยนเป็นใช้คำสั่ง /shop
-world.beforeEvents.chatSend.subscribe(event => {
-    const { sender, message } = event;
-    
-    if (message.toLowerCase() === "/shop" || message.toLowerCase() === "!shop") {
-        event.cancel = true;
-        showBuySellMenu(sender);
-    }
+// ลงทะเบียนคำสั่ง /shop
+system.beforeEvents.startup.subscribe(({ customCommandRegistry }) => {
+    /** @type {import("@minecraft/server").CustomCommand} */
+    const shopCommand = {
+        name: "shop",
+        description: "Open the shop menu",
+        permissionLevel: CommandPermissionLevel.Normal, // ทุกคนใช้ได้
+        cheatsRequired: false // ไม่ต้องเปิด cheat
+    };
+
+    customCommandRegistry.registerCommand(shopCommand, (context) => {
+        const player = context.source;
+        if (player && player.typeId === "minecraft:player") {
+            showBuySellMenu(player);
+        }
+    });
 });
